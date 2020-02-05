@@ -11,8 +11,9 @@ export default class Clock extends React.Component {
     this.state = {
       seconds: date.getSeconds(),
       minutes: date.getMinutes(),
-      hours: date.getHours(),
-      time: "0:0:0"
+      hours: (date.getHours() < 12) ? date.getHours() : (date.getHours() - 12),
+      meridiem: (date.getHours() < 12) ? "AM" : "PM",
+      time: "0:0:0 AM"
     };
     
      setInterval(this.tick.bind(this), 1000 );
@@ -26,7 +27,7 @@ export default class Clock extends React.Component {
   }
 
   printTime() {
-    return `${this.state.hours}:${this.state.minutes}:${this.state.seconds}`
+    return `${this.state.hours}:${this.state.minutes}:${this.state.seconds} ${meridiem}`
   }
 
   tick() {
@@ -46,11 +47,11 @@ export default class Clock extends React.Component {
        this.setState({ hours: hour })
     }
   
-    if (this.state.hours === 24) {
-      this.setState({ hours: 0 })
+    if (this.state.hours > 12) {
+      this.setState({ hours: 1 })
     }
     
-    this.setState( {time: `${this.state.hours}:${this.state.minutes}:${this.state.seconds}`})
+    this.setState( {time: `${this.state.hours}:${this.state.minutes}:${this.state.seconds} ${this.state.meridiem}`})
   }
 
 }
